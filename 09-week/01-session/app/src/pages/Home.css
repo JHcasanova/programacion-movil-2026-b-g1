@@ -1,0 +1,35 @@
+ion-content.pagina-inicio {
+  --background: #f5f7fa;
+}
+
+.contenedor {
+  width: min(100% - 24px, 900px);
+  margin: 0 auto;
+  padding: 16px 0 32px;
+}
+
+.boton-formulario {
+  margin-top: 20px;
+}
+
+.mensaje-error {
+  margin: 12px 4px;
+  font-weight: 600;
+}
+
+.encabezado-lista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.encabezado-lista h2 {
+  margin: 0;
+}
+
+.sin-productos {
+  text-align: center;
+  padding: 24px;
+}

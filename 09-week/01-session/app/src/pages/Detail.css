@@ -1,0 +1,17 @@
+ion-content {
+  --background: #f5f7fa;
+}
+
+.detalle-contenedor {
+  width: min(100% - 24px, 900px);
+  margin: 0 auto;
+  padding: 16px 0;
+}
+
+.detalle-contenedor h1 {
+  margin-top: 0;
+}
+
+.mensaje-error {
+  font-weight: 600;
+}
