@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'catalog_states.dart';
 import 'models.dart';
+import 'product_detail.dart';
 import 'store.dart';
 import 'theme.dart';
 
@@ -313,7 +314,7 @@ class _ShopHomeState extends State<ShopHome> {
       margin: EdgeInsets.zero,
       child: InkWell(
       borderRadius: BorderRadius.circular(24),
-      onTap: () => customize(p),
+      onTap: () => openDetail(p.id),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -384,6 +385,20 @@ class _ShopHomeState extends State<ShopHome> {
       ),
     ),
   );
+
+  Future<void> openDetail(int productId) async {
+    final product = await Navigator.push<Product>(
+      context,
+      MaterialPageRoute(
+        settings: RouteSettings(name: '/products/$productId', arguments: productId),
+        builder: (_) => ProductDetailPage(
+          store: store,
+          productId: productId,
+        ),
+      ),
+    );
+    if (product != null && mounted) await customize(product);
+  }
 
   Future<void> customize(Product p) async {
     String size = sizes.keys.first, topping = toppings.keys.first;
