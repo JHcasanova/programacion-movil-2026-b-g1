@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'catalog_states.dart';
 import 'models.dart';
+import 'order_tracking.dart';
 import 'product_detail.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -636,6 +637,17 @@ class _ShopHomeState extends State<ShopHome> {
                       Text('Nota: ${order['note']}'),
                     if (store.demo)
                       const Text('Pedido simulado · no requiere recogida'),
+                    const SizedBox(height: 12),
+                    FilledButton.tonalIcon(
+                      onPressed: () => Navigator.push<void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => OrderTrackingPage(order: order),
+                        ),
+                      ),
+                      icon: const Icon(Icons.timeline),
+                      label: const Text('Ver seguimiento'),
+                    ),
                   ],
                 ),
               ),
