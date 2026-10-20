@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/models.dart';
 import 'package:frontend/store.dart';
 
 void main() {
@@ -33,5 +34,34 @@ void main() {
     await tester.pumpAndSettle();
     expect(store.orders.single['customer'], 'Ana');
     expect(store.cart, isEmpty);
+  });
+
+  testWidgets('El error permite reintentar la carga del catálogo', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    var requests = 0;
+    final store = ShopStore(
+      catalogDelay: Duration.zero,
+      catalogLoader: () async {
+        requests++;
+        if (requests == 1) throw Exception('Fallo simulado');
+        return List.of(demoProducts);
+      },
+    );
+
+    await store.init();
+    await tester.pumpWidget(IceCreamApp(store: store));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('No pudimos cargar el catálogo'), findsOneWidget);
+    expect(requests, 1);
+
+    await tester.tap(find.text('Reintentar'));
+    await tester.pumpAndSettle();
+
+    expect(requests, 2);
+    expect(find.text('Fresa de temporada'), findsOneWidget);
+    expect(find.byKey(const Key('catalog-refresh')), findsOneWidget);
   });
 }

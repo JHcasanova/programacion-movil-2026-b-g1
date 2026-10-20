@@ -187,6 +187,7 @@ class _ShopHomeState extends State<ShopHome> {
         )
         .toList();
     return RefreshIndicator(
+      key: const Key('catalog-refresh'),
       onRefresh: store.loadProducts,
       child: ListView(
         padding: const EdgeInsets.all(20),
