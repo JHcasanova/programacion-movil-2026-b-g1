@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'models.dart';
 import 'store.dart';
+import 'theme.dart';
 
 void main() => runApp(const IceCreamApp());
 
@@ -31,31 +32,7 @@ class _IceCreamAppState extends State<IceCreamApp> {
   Widget build(BuildContext context) => MaterialApp(
     title: 'Ice Cream App',
     debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      useMaterial3: true,
-      scaffoldBackgroundColor: const Color(0xfffffaf4),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xffab3e58),
-        surface: const Color(0xfffffaf4),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xfffffaf4),
-        centerTitle: false,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      cardTheme: CardThemeData(
-        elevation: 0,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      ),
-    ),
+    theme: buildAppTheme(),
     home: ShopHome(store: store),
   );
 }
