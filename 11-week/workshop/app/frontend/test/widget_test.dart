@@ -18,6 +18,9 @@ void main() {
     await tester.ensureVisible(find.text('Fresa de temporada'));
     await tester.tap(find.text('Fresa de temporada'));
     await tester.pumpAndSettle();
+    expect(find.text('Detalle del sabor'), findsOneWidget);
+    await tester.tap(find.text('Personalizar este sabor'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Añadir · \$ 2.500 COP'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Carrito'));

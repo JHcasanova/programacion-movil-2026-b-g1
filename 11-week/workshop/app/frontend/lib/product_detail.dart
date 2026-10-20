@@ -38,11 +38,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         future: request,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
+            return Center(
               child: Semantics(
                 liveRegion: true,
                 label: 'Cargando detalle del sabor',
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
               ),
             );
           }
