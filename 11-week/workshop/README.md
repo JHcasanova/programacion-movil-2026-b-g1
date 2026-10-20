@@ -7,7 +7,7 @@
 - DOCS_REPO: https://github.com/code-corhuila/ica-docs
 - CODE_REPO: https://github.com/pablo12968/ica.app
 - BASELINE: team app, commit 6d7882db6555ed9aea749709ee4784be895dd72f
-- REFLECTION_DOC: PENDIENTE — agregar la URL del documento W11 Reflexion
+- REFLECTION_DOC: https://docs.google.com/document/d/14OsgIG7DqMe7WNtbro_nmQ_xzlduhXcdhXhawIKLjh8/edit?usp=sharing
 - MY_SCREENS: Catálogo de helados, carrito y confirmación del pedido
 <!-- CONFIG-END -->
 

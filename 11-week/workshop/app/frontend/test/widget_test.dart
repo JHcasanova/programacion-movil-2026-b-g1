@@ -25,7 +25,7 @@ void main() {
     expect(find.text('Tu bolsa de felicidad'), findsOneWidget);
     await tester.tap(find.text('Continuar con el pedido'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Simular pedido'));
+    await tester.enterText(find.byType(TextFormField).first, 'A');
     await tester.pumpAndSettle();
     expect(find.text('Escribe al menos 2 caracteres.'), findsOneWidget);
     await tester.enterText(find.byType(TextFormField).first, 'Ana');

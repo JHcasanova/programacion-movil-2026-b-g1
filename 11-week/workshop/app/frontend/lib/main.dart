@@ -560,7 +560,14 @@ class _ShopHomeState extends State<ShopHome> {
               context,
               MaterialPageRoute(builder: (_) => CheckoutPage(store: store)),
             );
-            if (done == true && mounted) setState(() => page = 2);
+            if (done == true && mounted) {
+              setState(() => page = 2);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Pedido confirmado correctamente'),
+                ),
+              );
+            }
           },
           child: const Padding(
             padding: EdgeInsets.all(12),
@@ -653,7 +660,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final form = GlobalKey<FormState>();
   final name = TextEditingController(), note = TextEditingController();
   bool sending = false;
+  bool formValid = false;
   String? error;
+
+  void validateFields(String _) {
+    final valid = name.text.trim().length >= 2 && note.text.length <= 300;
+    if (valid != formValid) setState(() => formValid = valid);
+  }
+
+  Future<void> cancelOrder() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('¿Cancelar el pedido?'),
+        content: const Text(
+          'Se descartarán el nombre y la nota. Los productos seguirán en el carrito.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Continuar editando'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Sí, cancelar'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) Navigator.pop(context, false);
+  }
+
   @override
   void dispose() {
     name.dispose();
@@ -674,7 +711,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (mounted) {
         setState(() {
           sending = false;
-          error = failure is OrderFailure ? failure.message : 'No pudimos confirmar el pedido. Revisa tu conexión y reintenta; el carrito se conserva.';
+          error = failure is OrderFailure
+              ? failure.message
+              : 'No pudimos confirmar el pedido. Revisa tu conexión y reintenta; el carrito se conserva.';
         });
       }
     }
@@ -710,6 +749,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               TextFormField(
                 controller: name,
                 enabled: !sending,
+                onChanged: validateFields,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 textCapitalization: TextCapitalization.words,
                 maxLength: 80,
                 decoration: const InputDecoration(
@@ -723,6 +764,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               TextFormField(
                 controller: note,
                 enabled: !sending,
+                onChanged: validateFields,
                 maxLength: 300,
                 maxLines: 3,
                 decoration: const InputDecoration(
@@ -752,7 +794,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               const SizedBox(height: 24),
               FilledButton(
-                onPressed: sending ? null : submit,
+                onPressed: sending || !formValid ? null : submit,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: sending
@@ -767,6 +809,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               : 'Enviar pedido',
                         ),
                 ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: sending ? null : cancelOrder,
+                child: const Text('Cancelar pedido'),
               ),
                 ],
               ),
