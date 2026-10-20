@@ -8,7 +8,7 @@
 - CODE_REPO: https://github.com/pablo12968/ica.app
 - BASELINE: team app, commit 6d7882db6555ed9aea749709ee4784be895dd72f
 - REFLECTION_DOC: PENDIENTE — agregar la URL del documento W11 Reflexion
-- MY_SCREENS:
+- MY_SCREENS: Catálogo de helados, carrito y confirmación del pedido
 <!-- CONFIG-END -->
 
 La línea base es la aplicación Flutter del equipo: catálogo de helados,
