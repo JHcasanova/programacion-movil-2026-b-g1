@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'catalog_states.dart';
 import 'models.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -155,7 +156,7 @@ class _ShopHomeState extends State<ShopHome> {
   );
 
   Widget catalog() {
-    if (store.loading) return const Center(child: CircularProgressIndicator());
+    if (store.loading) return const CatalogSkeleton();
     if (store.error != null) {
       return empty(
         Icons.cloud_off,
@@ -163,6 +164,17 @@ class _ShopHomeState extends State<ShopHome> {
         action: FilledButton(
           onPressed: store.loadProducts,
           child: const Text('Reintentar'),
+        ),
+      );
+    }
+    if (store.products.isEmpty) {
+      return empty(
+        Icons.icecream_outlined,
+        'Aún no hay sabores disponibles',
+        action: FilledButton.icon(
+          onPressed: store.loadProducts,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Recargar catálogo'),
         ),
       );
     }

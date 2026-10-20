@@ -14,6 +14,20 @@ class OrderFailure implements Exception {
 
 class ShopStore extends ChangeNotifier {
   static const apiUrl = String.fromEnvironment('API_URL');
+  static const catalogMode = String.fromEnvironment(
+    'CATALOG_MODE',
+    defaultValue: 'normal',
+  );
+  static const catalogDelayMs = int.fromEnvironment(
+    'CATALOG_DELAY_MS',
+    defaultValue: 650,
+  );
+  ShopStore({this.catalogLoader, Duration? catalogDelay})
+    : catalogDelay = catalogDelay ??
+          const Duration(milliseconds: catalogDelayMs);
+
+  final Future<List<Product>> Function()? catalogLoader;
+  final Duration catalogDelay;
   bool get demo => apiUrl.isEmpty;
   List<Product> products = [];
   final List<CartLine> cart = [];
@@ -47,7 +61,14 @@ class ShopStore extends ChangeNotifier {
     error = null;
     notifyListeners();
     try {
-      if (demo) {
+      await Future<void>.delayed(catalogDelay);
+      if (catalogLoader != null) {
+        products = await catalogLoader!();
+      } else if (catalogMode == 'error') {
+        throw Exception('Fallo de catálogo simulado');
+      } else if (catalogMode == 'empty') {
+        products = [];
+      } else if (demo) {
         products = List.of(demoProducts);
       } else {
         final response = await http
