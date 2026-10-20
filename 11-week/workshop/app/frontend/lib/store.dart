@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -154,8 +153,7 @@ class ShopStore extends ChangeNotifier {
       'items': cart.map((line) => line.toJson()).toList(),
     });
     if (_requestBody != body) {
-      _requestId =
-          'ica-${DateTime.now().microsecondsSinceEpoch}-${Random.secure().nextInt(1 << 32)}';
+      _requestId = 'ica-${DateTime.now().microsecondsSinceEpoch}';
       _requestBody = body;
     }
     Map<String, dynamic> order;
