@@ -99,5 +99,3 @@ El código y el proyecto iOS están incluidos. Para compilar y ejecutar en iPhon
 La firma Android de release conserva la configuración de desarrollo de la plantilla. Antes de publicar en una tienda, configura un identificador propio y la firma de producción. No se ha publicado la app ni conectado una pasarela de pagos.
 
 Referencias oficiales: https://docs.flutter.dev/deployment/android y https://docs.flutter.dev/deployment/ios.
-
-En esta sesión, con tu confirmación, los ocho precios originales de 2,50 / 3,00 se actualizaron una sola vez a 2.500 / 3.000 COP. La migración normal no vuelve a multiplicarlos. El ZIP contiene el código; tus datos y credenciales permanecen en la instalación original.
