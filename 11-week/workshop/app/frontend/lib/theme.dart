@@ -79,5 +79,19 @@ ThemeData buildAppTheme() {
       indicatorColor: Color(0xfff5d5dd),
       height: 72,
     ),
+    iconButtonTheme: const IconButtonThemeData(
+      style: ButtonStyle(
+        minimumSize: WidgetStatePropertyAll(
+          Size.square(AppTokens.minTouchTarget),
+        ),
+      ),
+    ),
+    filledButtonTheme: const FilledButtonThemeData(
+      style: ButtonStyle(
+        minimumSize: WidgetStatePropertyAll(
+          Size(48, AppTokens.minTouchTarget),
+        ),
+      ),
+    ),
   );
 }

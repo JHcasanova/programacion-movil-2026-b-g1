@@ -108,12 +108,15 @@ class _ShopHomeState extends State<ShopHome> {
                     ),
                   ),
                 if (store.storageWarning != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      store.storageWarning!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
+                  Semantics(
+                    liveRegion: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        store.storageWarning!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                     ),
                   ),
@@ -227,7 +230,8 @@ class _ShopHomeState extends State<ShopHome> {
           TextField(
             onChanged: (value) => setState(() => search = value),
             decoration: const InputDecoration(
-              hintText: 'Busca tu sabor favorito',
+              labelText: 'Buscar sabores',
+              hintText: 'Ejemplo: fresa',
               prefixIcon: Icon(Icons.search),
             ),
           ),
@@ -270,20 +274,27 @@ class _ShopHomeState extends State<ShopHome> {
               ),
             ),
           LayoutBuilder(
-            builder: (context, box) => Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: visible
-                  .map(
-                    (product) => SizedBox(
-                      width: box.maxWidth >= 550
-                          ? (box.maxWidth - 24) / 3
-                          : (box.maxWidth - 12) / 2,
-                      child: productCard(product),
-                    ),
-                  )
-                  .toList(),
-            ),
+            builder: (context, box) {
+              final columns = box.maxWidth >= 700
+                  ? 3
+                  : box.maxWidth >= 420
+                  ? 2
+                  : 1;
+              final cardWidth =
+                  (box.maxWidth - (columns - 1) * 12) / columns;
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: visible
+                    .map(
+                      (product) => SizedBox(
+                        width: cardWidth,
+                        child: productCard(product),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
           ),
           const SizedBox(height: 24),
           const Text(
@@ -295,9 +306,12 @@ class _ShopHomeState extends State<ShopHome> {
     );
   }
 
-  Widget productCard(Product p) => Card(
-    margin: EdgeInsets.zero,
-    child: InkWell(
+  Widget productCard(Product p) => Semantics(
+    container: true,
+    label: '${p.name}, ${p.category}, desde ${money(p.price)}',
+    child: Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
       borderRadius: BorderRadius.circular(24),
       onTap: () => customize(p),
       child: Padding(
@@ -330,6 +344,7 @@ class _ShopHomeState extends State<ShopHome> {
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
+                      isSelected: store.favorites.contains(p.id),
                       tooltip: store.favorites.contains(p.id)
                           ? 'Quitar de favoritos'
                           : 'Añadir a favoritos',
@@ -364,6 +379,7 @@ class _ShopHomeState extends State<ShopHome> {
               ],
             ),
           ],
+        ),
         ),
       ),
     ),
@@ -502,7 +518,10 @@ class _ShopHomeState extends State<ShopHome> {
                         onPressed: () => store.changeQuantity(line, -1),
                         icon: const Icon(Icons.remove_circle_outline),
                       ),
-                      Text('${line.quantity}'),
+                      Semantics(
+                        label: 'Cantidad: ${line.quantity}',
+                        child: Text('${line.quantity}'),
+                      ),
                       IconButton(
                         tooltip: 'Aumentar cantidad',
                         onPressed: line.quantity >= 20
@@ -667,11 +686,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
     child: Scaffold(
       appBar: AppBar(title: const Text('Confirmar pedido')),
       body: SafeArea(
-        child: Form(
-          key: form,
-          child: ListView(
-            padding: const EdgeInsets.all(24),
-            children: [
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: Form(
+              key: form,
+              child: ListView(
+                padding: const EdgeInsets.all(24),
+                children: [
               const Icon(Icons.storefront_outlined, size: 64),
               const SizedBox(height: 20),
               const Text(
@@ -716,12 +738,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               if (error != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    error!,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                Semantics(
+                  liveRegion: true,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      error!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                   ),
                 ),
@@ -743,7 +768,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
                 ),
               ),
-            ],
+                ],
+              ),
+            ),
           ),
         ),
       ),
