@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/models.dart';
 import 'package:frontend/store.dart';
+import 'package:frontend/product_detail.dart';
 
 class PendingCheckoutStore extends ShopStore {
   final response = Completer<void>();
@@ -19,6 +20,50 @@ class PendingCheckoutStore extends ShopStore {
 }
 
 void main() {
+  testWidgets(
+    'Detalle muestra carga y el sabor seleccionado por identificador',
+    (tester) async {
+      final store = ShopStore()..products = List.of(demoProducts);
+      final product = demoProducts.last;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ProductDetailPage(store: store, productId: product.id),
+        ),
+      );
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.text(product.name), findsOneWidget);
+      expect(find.text(product.description), findsOneWidget);
+      expect(find.text('Personalizar este sabor'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Un identificador inexistente permite volver al catálogo', (
+    tester,
+  ) async {
+    final store = ShopStore()..products = List.of(demoProducts);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ProductDetailPage(store: store, productId: -1),
+              ),
+            ),
+            child: const Text('Catálogo de prueba'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Catálogo de prueba'));
+    await tester.pumpAndSettle();
+    expect(find.text('Este sabor ya no está disponible'), findsOneWidget);
+    await tester.tap(find.text('Volver al catálogo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Catálogo de prueba'), findsOneWidget);
+  });
+
   testWidgets('El envío bloquea duplicados y el error conserva los datos', (
     tester,
   ) async {

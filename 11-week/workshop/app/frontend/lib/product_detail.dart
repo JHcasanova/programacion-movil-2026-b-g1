@@ -13,6 +13,7 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   static const mode = String.fromEnvironment('DETAIL_MODE', defaultValue: 'normal');
+  static const delayMs = int.fromEnvironment('DETAIL_DELAY_MS', defaultValue: 450);
   late Future<Product?> request;
 
   @override
@@ -22,7 +23,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Future<Product?> load() async {
-    await Future<void>.delayed(const Duration(milliseconds: 450));
+    await Future<void>.delayed(const Duration(milliseconds: delayMs));
     if (mode == 'error') throw Exception('Fallo de detalle simulado');
     if (mode == 'not-found') return null;
     return widget.store.products.where((p) => p.id == widget.productId).firstOrNull;
