@@ -13,6 +13,11 @@ class OrderFailure implements Exception {
 
 class ShopStore extends ChangeNotifier {
   static const apiUrl = String.fromEnvironment('API_URL');
+  static const demoCheckoutDelayMs = int.fromEnvironment(
+    'DEMO_CHECKOUT_DELAY_MS',
+    defaultValue: 0,
+  );
+  static const demoCheckoutError = bool.fromEnvironment('DEMO_CHECKOUT_ERROR');
   static const catalogMode = String.fromEnvironment(
     'CATALOG_MODE',
     defaultValue: 'normal',
@@ -158,6 +163,16 @@ class ShopStore extends ChangeNotifier {
     }
     Map<String, dynamic> order;
     if (demo) {
+      if (demoCheckoutDelayMs > 0) {
+        await Future<void>.delayed(
+          const Duration(milliseconds: demoCheckoutDelayMs),
+        );
+      }
+      if (demoCheckoutError) {
+        throw const OrderFailure(
+          'Error simulado de envío. El carrito se conserva; puedes reintentar.',
+        );
+      }
       order = {
         'id': _requestId,
         'createdAt': DateTime.now().toIso8601String(),

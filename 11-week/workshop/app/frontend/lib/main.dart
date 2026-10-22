@@ -748,9 +748,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-    canPop: !sending,
+    canPop: false,
+    onPopInvokedWithResult: (didPop, result) {
+      if (!didPop && !sending) cancelOrder();
+    },
     child: Scaffold(
-      appBar: AppBar(title: const Text('Confirmar pedido')),
+      appBar: AppBar(
+        title: const Text('Confirmar pedido'),
+        leading: BackButton(onPressed: sending ? null : cancelOrder),
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
